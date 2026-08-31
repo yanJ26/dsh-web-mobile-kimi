@@ -1,11 +1,17 @@
-# dsh-web-mobile-fix
-[![awesome · DSH plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
+# dsh-web-mobile-kimi
 
 **English** | [简体中文](README.zh.md)
 
 Mobile layout fixes for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web UI.
 
-A pure client-side CSS overlay that repairs the worst mobile breakages on narrow (≤700px viewport) screens, without touching any product source:
+Fork of [AcidGr/dsh-web-mobile-fix](https://github.com/AcidGr/dsh-web-mobile-fix) (MIT), keeping all upstream fixes and adding, on narrow (≤700px viewport) screens:
+
+- **Collapsed sidebar rail fully hidden** — the 56px rail no longer eats the row; the expanded sidebar still floats over the conversation and collapses on tap-outside
+- **Floating whale toggle** — a fixed white-circle button (top-left) opens/closes the sidebar; visually paired with the [dsh-mobile](https://github.com/yanJ26/dsh-mobile) Android app's native host-switch button stacked below it
+- **User-question card overflow fix** — the `ask_user_question` / plan-review card no longer bleeds past the right viewport edge; footer buttons (skip / confirm) wrap and stay reachable
+- **Rail footer plugin buttons stacked vertically** — `sidebar.footer.action` buttons (e.g. disk-browser, bizcard) no longer crush each other in the narrow rail
+
+Upstream fixes kept intact:
 
 - Settings panel becomes a full-screen column layout instead of a squeezed desktop layout
 - Directory-picker footer (Cancel / Confirm) pinned to one bottom row
@@ -17,7 +23,7 @@ A pure client-side CSS overlay that repairs the worst mobile breakages on narrow
 
 ## How it works
 
-The plugin ships a browser half (`exports["./client"]`, declared via `dsh.client.platform: "web"`), discovered by the client-modules scanner and loaded from the boot manifest. It injects one `<style>` tag with `@media (max-width: 700px)` overrides targeting the product's stable `data-slot` attributes, and removes the tag on unload — fully reversible.
+The plugin ships a browser half (`exports["./client"]`, declared via `dsh.client.platform: "web"`), discovered by the client-modules scanner and loaded from the boot manifest. It injects one `<style>` tag with overrides targeting the product's stable `data-slot` / `data-*-collapsed` attributes plus one floating toggle button, and removes both on unload — fully reversible.
 
 ## Requirements
 
@@ -26,47 +32,28 @@ The plugin ships a browser half (`exports["./client"]`, declared via `dsh.client
 
 ## Install
 
-### Bundle install (recommended)
-
-Installed from npm:
-
 ```sh
-dsh plugin --profile web add dsh-web-mobile-fix
+dsh plugin --profile web add github:yanJ26/dsh-web-mobile-kimi
 ```
 
-(No npm / local development — point pnpm at the repo instead:
+If the upstream `dsh-web-mobile-fix` is installed, remove it first — the two manage the same layout and will fight each other:
 
 ```sh
-dsh plugin --profile web add github:AcidGr/dsh-web-mobile-fix
+dsh plugin --profile web remove dsh-web-mobile-fix
 ```
-)
 
 Restart `dsh web` (or wait for the profile hot-reload), then hard-refresh the browser.
 
-### Manual install (no pnpm / offline)
-
-```sh
-PROFILE="$DSH_HOME/profiles/web"                 # adjust DSH_HOME and profile name
-mkdir -p "$PROFILE/plugins" "$PROFILE/node_modules/@dsh-profile"
-cp -r dsh-web-mobile-fix "$PROFILE/plugins/mobile-fix"
-ln -sfn ../../plugins/mobile-fix "$PROFILE/node_modules/@dsh-profile/mobile-fix"
-# append to $PROFILE/cordis.patch.yml:
-#   - insert:
-#       - id: mobile-fix
-#         name: '@dsh-profile/mobile-fix'
-```
-
 ## Verify
 
-Open the Web UI on a phone-width window — the settings panel, sidebar, and popups should be mobile-adapted.
+Open the Web UI on a phone-width window — the rail should be gone, a whale button floats top-left and toggles the sidebar; the settings panel, question cards, and popups should be mobile-adapted.
 
 ## Rollback
 
-- Bundle install: `dsh plugin --profile web remove dsh-web-mobile-fix`
-- Manual install: delete the `mobile-fix` insert block from `cordis.patch.yml` (the plugin dir can stay or go)
+`dsh plugin --profile web remove dsh-web-mobile-kimi`
 
 No product source is modified; upgrades do not overwrite it.
 
 ## License
 
-MIT
+MIT (upstream © AcidGr, additions © yanJ26)

@@ -1,10 +1,17 @@
-# dsh-web-mobile-fix
+# dsh-web-mobile-kimi
 
 [English](README.md) | **简体中文**
 
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web UI 的移动端布局修复插件。
 
-纯客户端 CSS 覆盖层，在窄屏（视口 ≤700px）下修复最影响使用的移动端问题，完全不改动产品源码：
+Fork 自 [AcidGr/dsh-web-mobile-fix](https://github.com/AcidGr/dsh-web-mobile-fix)（MIT），保留上游全部修复，并在窄屏（视口 ≤700px）下追加：
+
+- **收起态侧边栏彻底隐藏**：56px 常驻栏不再占行；展开时侧边栏照旧悬浮在对话区之上，点击外部收起
+- **悬浮鲸鱼开关**：左上角白底圆形按钮，点按展开/收起侧边栏；与 [dsh-mobile](https://github.com/yanJ26/dsh-mobile) 安卓 app 叠在其下方的原生切主机按钮同一视觉语言
+- **交互提问卡片溢出修复**：`ask_user_question` / 计划评审卡片不再超出视口右缘，底部按钮（跳过本题 / 确认）可换行、完整可达
+- **窄栏底部插件按钮纵向排列**：`sidebar.footer.action` 槽位的按钮（如文件夹、名片插件）在窄栏里不再互相挤压
+
+保留的上游修复：
 
 - 设置面板改为全屏纵向布局，不再被挤成桌面布局
 - 目录选择器底部（取消/确定）固定在同一个底部行
@@ -16,7 +23,7 @@
 
 ## 工作原理
 
-插件带一个浏览器端（`exports["./client"]`，通过 `dsh.client.platform: "web"` 声明），由 client-modules 扫描器发现并随启动清单加载。它注入一个 `<style>` 标签，内容是针对产品稳定 `data-slot` 属性的 `@media (max-width: 700px)` 覆盖；插件卸载时标签自动移除——完全可逆。
+插件带一个浏览器端（`exports["./client"]`，通过 `dsh.client.platform: "web"` 声明），由 client-modules 扫描器发现并随启动清单加载。它注入一个 `<style>` 标签（针对产品稳定 `data-slot` / `data-*-collapsed` 属性的覆盖）和一个悬浮切换按钮；插件卸载时两者自动移除——完全可逆。
 
 ## 兼容性
 
@@ -25,48 +32,28 @@
 
 ## 安装
 
-### 方式一：bundle 安装（推荐）
-
-从 npm 安装：
-
 ```sh
-dsh plugin --profile web add dsh-web-mobile-fix
+dsh plugin --profile web add github:yanJ26/dsh-web-mobile-kimi
 ```
 
-（不走 npm / 本地开发时，可用仓库地址：
+如已安装上游 `dsh-web-mobile-fix`，请先卸载——两者管同一块布局，会互相冲突：
 
 ```sh
-dsh plugin --profile web add github:AcidGr/dsh-web-mobile-fix
+dsh plugin --profile web remove dsh-web-mobile-fix
 ```
-
-）
 
 重启 `dsh web`（或等 profile 热加载），浏览器硬刷新即可。
 
-### 方式二：手动安装（无 pnpm / 离线）
-
-```sh
-PROFILE="$DSH_HOME/profiles/web"                 # 按实际修改 DSH_HOME 和 profile 名
-mkdir -p "$PROFILE/plugins" "$PROFILE/node_modules/@dsh-profile"
-cp -r dsh-web-mobile-fix "$PROFILE/plugins/mobile-fix"
-ln -sfn ../../plugins/mobile-fix "$PROFILE/node_modules/@dsh-profile/mobile-fix"
-# 在 $PROFILE/cordis.patch.yml 追加：
-#   - insert:
-#       - id: mobile-fix
-#         name: '@dsh-profile/mobile-fix'
-```
-
 ## 验证
 
-用手机宽度窗口打开 Web UI——设置面板、侧边栏、弹层应已适配移动端。
+用手机宽度窗口打开 Web UI——常驻栏应已消失，左上角出现鲸鱼按钮可开关侧边栏；设置面板、提问卡片、弹层应已适配移动端。
 
 ## 回滚
 
-- bundle 安装：`dsh plugin --profile web remove dsh-web-mobile-fix`
-- 手动安装：删掉 `cordis.patch.yml` 里的 `mobile-fix` insert 块（插件目录可留可删）
+`dsh plugin --profile web remove dsh-web-mobile-kimi`
 
 不修改任何产品源码，升级不覆盖、无残留。
 
 ## 许可证
 
-MIT
+MIT（上游 © AcidGr，新增部分 © yanJ26）

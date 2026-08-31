@@ -2,5 +2,5 @@
 # name; remove this file's insert block (or the bundle from the profile
 # bundles list) to restore the stock UI.
 - insert:
-    - id: mobile-fix
-      name: 'dsh-web-mobile-fix'
+    - id: mobile-kimi
+      name: 'dsh-web-mobile-kimi'

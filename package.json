@@ -1,7 +1,7 @@
 {
-  "name": "dsh-web-mobile-fix",
-  "version": "1.0.2",
-  "description": "Mobile layout fixes for the DeepSeek Harness Web UI: settings panel, popups, sidebar, and session header on narrow (≤700px) screens. Pure client-side CSS overlay.",
+  "name": "dsh-web-mobile-kimi",
+  "version": "1.1.0",
+  "description": "Mobile layout fixes for the DeepSeek Harness Web UI (fork of dsh-web-mobile-fix): settings panel, popups, sidebar rail fully collapsible with a floating whale toggle, user-question card overflow fix, vertical rail footer buttons on narrow (≤700px) screens. Pure client-side CSS overlay + one injected button.",
   "license": "MIT",
   "type": "module",
   "main": "lib/index.js",
@@ -24,11 +24,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AcidGr/dsh-web-mobile-fix.git"
+    "url": "git+https://github.com/yanJ26/dsh-web-mobile-kimi.git"
   },
-  "homepage": "https://github.com/AcidGr/dsh-web-mobile-fix",
+  "homepage": "https://github.com/yanJ26/dsh-web-mobile-kimi",
   "bugs": {
-    "url": "https://github.com/AcidGr/dsh-web-mobile-fix/issues"
+    "url": "https://github.com/yanJ26/dsh-web-mobile-kimi/issues"
   },
   "keywords": [
     "deepseek-harness",
