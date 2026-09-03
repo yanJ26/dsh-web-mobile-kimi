@@ -1,6 +1,6 @@
 {
   "name": "dsh-web-mobile-kimi",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Mobile layout fixes for the DeepSeek Harness Web UI (fork of dsh-web-mobile-fix): settings panel, popups, sidebar rail fully collapsible with a floating whale toggle, user-question card overflow fix, vertical rail footer buttons on narrow (≤700px) screens. Pure client-side CSS overlay + one injected button.",
   "license": "MIT",
   "type": "module",
